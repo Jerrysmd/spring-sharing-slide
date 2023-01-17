@@ -49,9 +49,11 @@ count: false
 
 3.Spring 核心概念 IOC & DI & Bean
 
-4.Bean 的配置和 DI 的配置
+4.Bean 的配置、实例化、生命周期
 
-5.Spring 注解开发
+5.DI 的注入方式、配置
+
+6.Spring 注解开发
 
 ---
 
@@ -525,6 +527,117 @@ setter 注入灵活性更强。这个主要取决于你用的bean是怎么实现
 
 ---
 
+**| 4.** - bean 的实例化
+
+.pure-g[
+  .pure-u-6-24.font-xxs.gutter-8[
+
++ 提供可访问的构造方法（常用）
+
+```java
+public class BookDaoImpl implements BookDao{
+    public BookDaoImpl(){
+        print("book constructor is running");
+    }
+    public void save(){
+        print("book dao save");
+    }
+}
+```
+
++ 配置
+
+```xml
+<bean id="bookDao" class="com.jerry.dao.impl.BookDaoImpl"></bean>
+```
+
+
+
+  ]
+  .pure-u-6-24.font-xxs.gutter-4[
+
++ 静态工厂
+
+```java
+public class OrderDaoFactory{
+    public static OrderDao getOrderDao(){
+        return new OrderDaoImpl();
+    }
+}
+```
+
++ 配置
+
+  ```xml
+  <bean id="orderDao" class="com.jerry.factory.OrderDaoFactory" factory-method="getOrderDao"></bean>
+  ```
+
++ 使用
+
+  ```java
+  main(){
+      UserDaoFactory userDaoFactory = new UserDaoFactory();
+      UserDao userDao = userDaoFactory.getUserDao();
+      userDao.save();
+  }
+  ```
+
+
+
+  ]
+
+  .pure-u-6-24.font-xxs.gutter-4[
+
++ 实例工厂
+
+  ```java
+  public class UserDaoFactory{
+      public UserDao getUserDao(){
+          return new UserDaoImpl();
+      }
+  }
+  ```
+
++ 配置
+
+  ```xml
+  <bean id="userFactory" class="com.jerry.factory.UserDaoFactory"></bean>
+  <bean id="userDao" factory-method="getUserDao" factory-bean="userFactory"></bean>
+  ```
+
+  ]
+
+  .pure-u-6-24.font-xxs.gutter-4[
+
++ FactoryBean 
+
+  ```java
+  public class UserDaoFactoryBean implements FactoryBean<UserDao>{
+      //代替原始实例工厂中创建对象的方法
+      public UserDao getObject() throws Exception{
+          return new UserDaoImpl();
+      }
+      public Class<?> getObjectType(){
+          return UserDao.class;
+      }
+      public boolean isSingleton(){
+          return true;
+      }
+  }
+  ```
+
++ 配置
+
+  ```xml
+  <bean id="userDao" class="com.jerry.factory.UserDaoFactoryBean"></bean>
+  ```
+
+  ]
+
+]
+
+---
+
 
 
 **| 4.**
@@ -566,53 +679,6 @@ bean 的生命周期控制方法：
 
 ---
 
-**| 4.** - bean 的实例化 (了解)
-
-.pure-g[
-  .pure-u-6-24.font-xs.gutter-8[
-构造方法实例化（常用）
-
-+ 提供可访问的构造方法
-
-```java
-public class DaoImpl implements BookDao{
-    public BookDaoImpl{
-        
-    }
-}
-```
-
-+ 配置
-
-
-
-  ]
-  .pure-u-6-24.font-xs.gutter-4[
-
-数据层实现：
-
-```xml
-
-```
-
-  ]
-
-  .pure-u-6-24.font-xs.gutter-4[
-
-业务层实现：
-
-  ]
-
-  .pure-u-6-24.font-xs.gutter-4[
-
-业务层实现：
-
-  ]
-
-]
-
----
-
 **| 4.**
 
 bean 配置大全
@@ -640,7 +706,67 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
 
 ---
 
-**| 4.**
+**| 5.** - DI 的注入方式 之 setter 注入
+
++ 在 bean 中定义引用类型属性并提供可访问的 set 方法
+
+  ```java
+  public class BookServiceImpl implements BookService {
+      private BookDao bookDao;
+      public void setBookDao(BookDao bookDao){
+          this.bookDao = bookDao;
+      }
+  }
+  ```
+
++ 配置中使用 property 标签 `ref` 属性注入<mark>引用类型对象</mark>
+
++ 配置中使用 property 标签 `value` 属性注入<mark>简单数据类型</mark>
+
+  ```xml
+  <bean id="bookDao" class="com.jerry.dao.impl.BookDaoImpl"/>
+  <bean id="bookService" class="com.jerry.service.impl.BookServiceImpl">
+      <property name="bookDao" ref="bookDao"/>
+      <property name="connectionNum" value="10"/>
+  </bean>
+  ```
+
+
+
+---
+
+**| 5.** - DI 的注入方式 之 构造器注入
+
+
+
++ 在 bean 中定义引用类型属性并提供可访问的`构造`方法
+
+  ```java
+  public class BookServiceImpl implements BookService {
+      private BookDao bookDao;
+      public BookServiceImpl(BookDao bookDao){
+          this.bookDao = bookDao;
+      }
+  }
+  ```
+
++ 配置中使用 property 标签 `ref` 属性注入<mark>引用类型对象</mark>
+
++ 配置中使用 property 标签 `value` 属性注入<mark>简单数据类型</mark>
+
+  ```xml
+  <bean id="bookDao" class="com.jerry.dao.impl.BookDaoImpl"/>
+  <bean id="bookService" class="com.jerry.service.impl.BookServiceImpl">
+      <constructor-arg name="bookDao" ref="bookDao"/>
+      <constructor-arg name="connectionNum" value="10"/>
+  </bean>
+  ```
+
+
+
+---
+
+**| 5.**
 
 注入依赖 配置大全
 
@@ -664,7 +790,7 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
 
 ---
 
-**| 5.注解**
+**| 6.注解**
 
 目的：简化开发
 
@@ -688,7 +814,7 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
 
 ---
 
-**| 5.注解**
+**| 6.注解**
 
 **使用注释依赖注入：**
 
@@ -716,7 +842,7 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
 
 ---
 
-**| 5.注解**
+**| 6.注解**
 
 .pure-g[
   .pure-u-24-24.font-sm.gutter-8[

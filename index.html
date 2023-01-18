@@ -55,6 +55,12 @@ count: false
 
 6.Spring 注解开发
 
+???
+
+1.类、对象、继承、多态
+
+2.spring 背景和 spring framework 架构
+
 ---
 
 **| 1.Java 基本概念**
@@ -282,7 +288,7 @@ public interface BookDao {
 
 ```java
 public class BookDaoImpl implements BookDao {
-    @Override
+    
     public void save() {
         System.out.println("method");
     }
@@ -392,7 +398,7 @@ public class DaoImpl2 implements Dao{
 
 --
 
-解决方案：
+解决思想：
 
 + 在使用对象时，在程序中不要主动使用 new 产生对象，转换为由`外部`提供对象
 + 对象的创建控制权由程序移到`外部`，这种思想称为 IoC（Inversion of Control）控制反转
@@ -517,7 +523,7 @@ setter 注入灵活性更强。这个主要取决于你用的bean是怎么实现
 
 ---
 
-**| 4.**
+**| 4.Bean 的配置**
 
 | 类别     | 描述                                                         |
 | -------- | :----------------------------------------------------------- |
@@ -531,7 +537,7 @@ setter 注入灵活性更强。这个主要取决于你用的bean是怎么实现
 
 ---
 
-**| 4.** - bean 的实例化
+**| 4.Bean 的实例化** 
 
 .pure-g[
   .pure-u-6-24.font-xxs.gutter-8[
@@ -644,7 +650,7 @@ public class OrderDaoFactory{
 
 
 
-**| 4.**
+**| 4.Bean 的生命周期**
 
 bean 的生命周期：bean 从创建到销毁的整体过程
 
@@ -663,7 +669,7 @@ bean 的生命周期控制方法：
 1. 创建对象，内存分配
 2. 执行构造方法
 3. 执行属性注入
-4. 执行 bean 初始化方法
+4. **执行 bean 初始化方法**
 
   ]
   .pure-u-12-24.font-x.gutter-4[
@@ -674,16 +680,26 @@ bean 的生命周期控制方法：
 
 `第三步：关闭容器`
 
-1. 执行  bean 销毁方法
+1. **执行  bean 销毁方法**
 
   ]
 ]
 
 ???
 
+1.相当于是 new 在做的事情
+
+2.前面说的构造方法实例化
+
+3.调用依赖注入，setter 或者构造器
+
+执行 service 操作
+
+1.在关闭容器之前调用销毁方法
+
 ---
 
-**| 4.**
+**| 4.Bean 的配置总结**
 
 bean 配置大全
 
@@ -704,13 +720,29 @@ bean 配置大全
 
 ???
 
-bean 的实例化：
+id: 访问它的名称
 
-ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静态工厂、实例工厂、FactoryBean 实例化bean
+name: 是 id 的别名
+
+class: 定义 bean 是哪个类的
+
+scope：默认单例，可以配非单例、还有一些其他的也可以自定义
+
+init-method
+
+destroy-method
+
+autowire：自动装配，后面注解会介绍
+
+factory-method、factory-bean
+
+ioc容器自动调用无参构造方法实例化 bean，另外还有：静态工厂、实例工厂、FactoryBean 实例化bean
+
+lazy-init：控制bean是否延迟加载
 
 ---
 
-**| 5.** - DI 的注入方式 之 setter 注入
+**| 5.DI 的注入方式** -  之 setter 注入
 
 + 在 bean 中定义引用类型属性并提供可访问的 set 方法
 
@@ -739,7 +771,7 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
 
 ---
 
-**| 5.** - DI 的注入方式 之 构造器注入
+**| 5.DI 的注入方式** -  之 构造器注入
 
 
 
@@ -770,7 +802,7 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
 
 ---
 
-**| 5.**
+**| 5.DI 的配置总结**
 
 注入依赖 配置大全
 
@@ -846,7 +878,7 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
 
 ---
 
-**| 6.注解**
+**| 6.注解** - XML 配置对比注解配置
 
 .pure-g[
   .pure-u-24-24.font-sm.gutter-8[
@@ -862,17 +894,9 @@ ioc容器自动调用无参构造方法实例化 bean，还有另外三种：静
   ]
 ]
 
----
-
-class: middle
-
-count: false
-
-
-
 ???
 
-大家有什么问题，或者是项目的问题，kimi 也会帮忙回答
+大家有什么问题要提问的，或者是关于项目的问题，组里做 Java 也会帮忙回答
 
     </textarea>
     

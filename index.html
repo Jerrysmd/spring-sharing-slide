@@ -55,11 +55,7 @@ count: false
 
 6.Spring 注解开发
 
-???
 
-1.类、对象、继承、多态
-
-2.spring 背景和 spring framework 架构
 
 ---
 
@@ -174,14 +170,6 @@ Java：
 
   ]
 ]
-
-???
-
-public 任何地方被访问和使用
-
-声明成员变量
-
-
 
 ---
 
@@ -307,17 +295,7 @@ Spring 形成了一种开发的生态圈。Spring 提供了若干个项目，每
 
 ![image](722072-20190601014708455-34471552.png)
 
-???
 
-企业
-
-其他的技术在项目开发中都可以选择
-
-咱们大部分项目都使用的是 spring integration 和 spring batch 这两个技术
-
-其他的所有技术都基于 spring framework，所以它是一个底层的和设计型的框架
-
-今天的 sharing 集中于 spring framework
 
 ---
 
@@ -326,22 +304,6 @@ Spring 形成了一种开发的生态圈。Spring 提供了若干个项目，每
 spring framework 系统架构
 
 ![image-20230113174827013](image-20230113174827013.png)
-
-???
-
-从下往上看
-
-core container: 这个模块是 spring 框架中最核心的部分
-
-其他所有模块都是依赖他运行的
-
-看到container容器这样一个词，说明他是装东西的，装什么东西，对 Java 程序来说，只有一种东西可以装，那就是对象
-
-AOP：面向切面编程思想。在不惊动原始代码的情况下增强功能。
-
-我从 sean 和 neil 的 kt 里看到
-
-公司项目使用的 spring integration batch 里有一个 job listener 也有这种思想，关于这两个技术 大家可以看 sean 和 neil 之前的 kt
 
 
 
@@ -383,14 +345,6 @@ public class DaoImpl2 implements Dao{
 
   ]
 ]
-
-???
-
-原始开发
-
-项目上线发布运行后，这个数据层的实现你需要换一下
-
-带来是：重新编译、重新测试、重新部署、重新发布
 
 --
 
@@ -505,21 +459,7 @@ DI 问题：
 + Service 中需要的 Dao 对象如何进入到 Service 中？（提供方法）
 + Service 与 Dao 间的关系如何描述？（配置）
 
-???
 
-先介绍这个结构，这是一个java标准的文件结构
-
-上周日 draven 给我做了个 sharing，给我讲了 flask、Django 项目，我们发现 Python 中没有严格的 DAO 和 Service 层，通常使用视图函数或视图类来处理请求。
-
-在 Java 中，DAO (Data Access Object) 是一种设计模式，用于与数据库进行交互。它是一个接口，用于定义对数据库进行增删改查等操作的方法。DAO 的具体实现是使用数据访问框架，如 JDBC 或 Hibernate。
-
-Service 是业务逻辑层，它调用 DAO 的方法来完成业务逻辑的处理。它的作用是将数据库操作与业务逻辑分离开来。在 Service 层中还可以进行数据校验和业务规则的验证，以及事务管理。
-
--
-
-依赖注入的两种方式：使用 setter 注入的方式 、构造器注入
-
-setter 注入灵活性更强。这个主要取决于你用的bean是怎么实现的，别人写的bean用构造你只能用构造，用setter你就用setter
 
 ---
 
@@ -685,17 +625,7 @@ bean 的生命周期控制方法：
   ]
 ]
 
-???
 
-1.相当于是 new 在做的事情
-
-2.前面说的构造方法实例化
-
-3.调用依赖注入，setter 或者构造器
-
-执行 service 操作
-
-1.在关闭容器之前调用销毁方法
 
 ---
 
@@ -718,27 +648,7 @@ bean 配置大全
       />
 ```
 
-???
 
-id: 访问它的名称
-
-name: 是 id 的别名
-
-class: 定义 bean 是哪个类的
-
-scope：默认单例，可以配非单例、还有一些其他的也可以自定义
-
-init-method
-
-destroy-method
-
-autowire：自动装配，后面注解会介绍
-
-factory-method、factory-bean
-
-ioc容器自动调用无参构造方法实例化 bean，另外还有：静态工厂、实例工厂、FactoryBean 实例化bean
-
-lazy-init：控制bean是否延迟加载
 
 ---
 
@@ -786,9 +696,9 @@ lazy-init：控制bean是否延迟加载
   }
   ```
 
-+ 配置中使用 property 标签 `ref` 属性注入<mark>引用类型对象</mark>
++ 配置中使用 constructor-arg 标签 `ref` 属性注入<mark>引用类型对象</mark>
 
-+ 配置中使用 property 标签 `value` 属性注入<mark>简单数据类型</mark>
++ 配置中使用 constructor-arg 标签 `value` 属性注入<mark>简单数据类型</mark>
 
   ```xml
   <bean id="bookDao" class="com.jerry.dao.impl.BookDaoImpl"/>
@@ -894,9 +804,7 @@ lazy-init：控制bean是否延迟加载
   ]
 ]
 
-???
 
-大家有什么问题要提问的，或者是关于项目的问题，组里做 Java 也会帮忙回答
 
     </textarea>
     
